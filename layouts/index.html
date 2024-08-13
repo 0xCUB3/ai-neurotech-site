@@ -1,0 +1,101 @@
+{{ define "main" }}
+<section class="hero-section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 text-center">
+        <h1 class="main-title">AI Literacy</h1>
+        <p class="subtitle">Empowering the future</p>
+        <div class="changing-text-wrapper">
+          <span id="changing-text"></span>
+          <span class="cursor"></span>
+        </div>
+        <div class="cta-wrapper">
+          <a href="#learn-more" class="cta-button">Explore</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="learn-more" class="section section-sm">
+  <div class="container">
+    <h2 class="section-title">Core Concepts</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-4 mb-4">
+        <div class="concept-card">
+          <div class="concept-icon">🧠</div>
+          <h3>Machine Learning</h3>
+          <p>Algorithms that improve through experience</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="concept-card">
+          <div class="concept-icon">🕸️</div>
+          <h3>Neural Networks</h3>
+          <p>Inspired by the human brain</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="concept-card">
+          <div class="concept-icon">💬</div>
+          <h3>Natural Language Processing</h3>
+          <p>Bridging human communication and AI</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+const texts = [
+  "Discover AI",
+  "Understand the future",
+  "Embrace innovation",
+  "Shape tomorrow"
+];
+let textIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+const typingSpeed = 100;
+const deletingSpeed = 50;
+const pauseDuration = 1000;
+
+function typeText() {
+  const current = texts[textIndex];
+  const changingText = document.getElementById('changing-text');
+  
+  if (isDeleting) {
+    changingText.textContent = current.substring(0, charIndex - 1);
+    charIndex--;
+  } else {
+    changingText.textContent = current.substring(0, charIndex + 1);
+    charIndex++;
+  }
+
+  if (!isDeleting && charIndex === current.length) {
+    isDeleting = true;
+    setTimeout(typeText, pauseDuration);
+  } else if (isDeleting && charIndex === 0) {
+    isDeleting = false;
+    textIndex = (textIndex + 1) % texts.length;
+    setTimeout(typeText, typingSpeed);
+  } else {
+    setTimeout(typeText, isDeleting ? deletingSpeed : typingSpeed);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  typeText();
+  
+  const heroSection = document.querySelector('.hero-section');
+  heroSection.style.opacity = '0';
+  heroSection.style.transform = 'translateY(20px)';
+  
+  setTimeout(() => {
+    heroSection.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+    heroSection.style.opacity = '1';
+    heroSection.style.transform = 'translateY(0)';
+  }, 100);
+});
+</script>
+{{ end }}
